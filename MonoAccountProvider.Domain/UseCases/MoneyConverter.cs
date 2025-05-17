@@ -5,9 +5,9 @@ namespace MonoAccountProvider.Domain.UseCases;
 public class MoneyConverter
 {
 	private const int UahCurrencyCode = 980;
+	private readonly IAsyncEnumerable<CurrencyRate> _currencyRates;
 
 	private Money _onBalance;
-	private readonly IAsyncEnumerable<CurrencyRate> _currencyRates;
 
 	public MoneyConverter(IAsyncEnumerable<CurrencyRate> rates, Money balance)
 	{
@@ -17,7 +17,6 @@ public class MoneyConverter
 
 	public async IAsyncEnumerable<Money> ConvertTo(IAsyncEnumerable<int> targetCurrencyCodes)
 	{
-
 		if (_onBalance.CurrencyCode != UahCurrencyCode)
 		{
 			_onBalance = await ConvertTo(UahCurrencyCode);
@@ -32,6 +31,7 @@ public class MoneyConverter
 			else
 			{
 				Money convertedMoney = await ConvertTo(code);
+
 				yield return convertedMoney;
 			}
 		}
@@ -103,7 +103,7 @@ public class MoneyConverter
 	private decimal GetAmountWithRatesCross(CurrencyRate cr, int targetCurrencyCode)
 	{
 		decimal amount = 0;
-		
+
 		if (cr.CurrencyCodeA == _onBalance.CurrencyCode && cr.CurrencyCodeB == targetCurrencyCode)
 		{
 			amount = _onBalance.Amount * (cr.RateCross ?? default);

@@ -18,11 +18,10 @@ public class AccountRow
 	{
 		yield return _account.MaskedPan;
 
-		var amountsOfMoney = GetAmountsOfMoneyAsync();
+		IAsyncEnumerable<string> amountsOfMoney = GetAmountsOfMoneyAsync();
+
 		await foreach (string amount in amountsOfMoney)
-		{
 			yield return amount;
-		}
 	}
 
 	private async IAsyncEnumerable<string> GetAmountsOfMoneyAsync()
@@ -34,7 +33,7 @@ public class AccountRow
 				.Select(m => m.Amount)
 				.FirstOrDefaultAsync();
 
-			yield return balanceInCurrency.ToString(); //CultureInfo.CurrentCulture - but why? TODO
+			yield return balanceInCurrency.ToString(CultureInfo.CurrentCulture);
 		}
 	}
 }

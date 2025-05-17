@@ -10,6 +10,7 @@ public class MonobankRatesService
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly IAppConfigReader _appConfigReader;
+
 	public MonobankRatesService(HttpClient client,
 		JsonSerializerOptions jsonSerializerOptions,
 		IAppConfigReader appConfigReader)
@@ -21,20 +22,20 @@ public class MonobankRatesService
 
 	public async IAsyncEnumerable<CurrencyRateDto> GetCurrencyRatesAsync()
 	{
-		var currenciesRatesUri = _appConfigReader.GetSectionAsync("CurrencyRatesUri");
-		
-		var rates = await _httpClient.GetFromJsonAsync<IAsyncEnumerable<CurrencyRateDto>>(
-			currenciesRatesUri,
-			_jsonSerializerOptions);
-		
+		string currenciesRatesUri = _appConfigReader.GetSectionAsync("CurrencyRatesUri");
+
+		IAsyncEnumerable<CurrencyRateDto>? rates =
+			await _httpClient.GetFromJsonAsync<IAsyncEnumerable<CurrencyRateDto>>(
+				currenciesRatesUri,
+				_jsonSerializerOptions);
+
 		if (rates is null)
 		{
 			throw new ArgumentNullException();
 		}
+
 		//Q: why cant I just return IAsyncEnumerable?
-		await foreach (var rate in rates)
-		{
+		await foreach (CurrencyRateDto rate in rates)
 			yield return rate;
-		}
 	}
 }

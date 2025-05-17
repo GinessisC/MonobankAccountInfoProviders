@@ -12,6 +12,7 @@ public class CurrencyDataReceiverService
 	private readonly IAppConfigReader _appConfigReader;
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
+
 	public CurrencyDataReceiverService(HttpClient httpClient,
 		JsonSerializerOptions jsonSerializerOptions,
 		IAppConfigReader appConfigReader)
@@ -20,11 +21,12 @@ public class CurrencyDataReceiverService
 		_jsonSerializerOptions = jsonSerializerOptions;
 		_appConfigReader = appConfigReader;
 	}
-	
+
 	public async IAsyncEnumerable<CurrencyDto> GetCurrenciesAsync()
 	{
-		var currencyDataUri = _appConfigReader.GetSectionAsync("CurrencyDataUri");
-		var currencyDto = await _httpClient.GetFromJsonAsync<IAsyncEnumerable<CurrencyDto>>(
+		string currencyDataUri = _appConfigReader.GetSectionAsync("CurrencyDataUri");
+
+		IAsyncEnumerable<CurrencyDto>? currencyDto = await _httpClient.GetFromJsonAsync<IAsyncEnumerable<CurrencyDto>>(
 			currencyDataUri,
 			_jsonSerializerOptions);
 
@@ -33,10 +35,10 @@ public class CurrencyDataReceiverService
 			throw new NullReferenceException();
 		}
 
-		await foreach (var currency in currencyDto)
-		{
+		await foreach (CurrencyDto currency in currencyDto)
 			yield return currency;
-		}
-		yield return new CurrencyDto(UahCurrencyName, UahCurrencyCode); //service does not provide info about uah currency
+
+		yield return
+			new CurrencyDto(UahCurrencyName, UahCurrencyCode); //service does not provide info about uah currency
 	}
 }

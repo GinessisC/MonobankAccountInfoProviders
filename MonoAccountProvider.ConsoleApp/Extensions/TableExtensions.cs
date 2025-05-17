@@ -1,4 +1,3 @@
-using MonoAccountProvider.Domain.Entities;
 using ConsoleTables;
 using MonoAccountProvider.ConsoleApp.view;
 
@@ -8,16 +7,17 @@ public static class TableExtensions
 {
 	public static async Task AddAsync(this ConsoleTable table, JarRow jarRow)
 	{
-		var rawJar = jarRow.GetRawDataAsync();
-		var rowToAddToTable = await rawJar.ToArrayAsync<object>();
-			
+		IAsyncEnumerable<string> rawJar = jarRow.GetRawDataAsync();
+		object[] rowToAddToTable = await rawJar.ToArrayAsync<object>();
+
 		table.AddRow(rowToAddToTable);
 	}
+
 	public static async Task AddAsync(this ConsoleTable table, AccountRow accountRow)
 	{
-		var rawAccount = accountRow.GetRawDataAsync();
-		var rowToAddToTable = await rawAccount.ToArrayAsync<object>();
-			
+		IAsyncEnumerable<string> rawAccount = accountRow.GetRawDataAsync();
+		object[] rowToAddToTable = await rawAccount.ToArrayAsync<object>();
+
 		table.AddRow(rowToAddToTable);
 	}
 }

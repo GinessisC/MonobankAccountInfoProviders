@@ -9,7 +9,7 @@ public class CrmRequestsHandler : DelegatingHandler
 	private readonly ILogger<CrmRequestsHandler> _logger;
 	private readonly IMemoryCache _memoryCache;
 	private readonly MemoryCacheEntryOptions _cacheOptions;
-	
+
 	public CrmRequestsHandler(ILogger<CrmRequestsHandler> logger,
 		IMemoryCache memoryCache)
 	{
@@ -27,7 +27,6 @@ public class CrmRequestsHandler : DelegatingHandler
 		HttpRequestMessage request,
 		CancellationToken cancellationToken)
 	{
-		//TODO: refactor code 
 		string key = request.RequestUri?.ToString() ?? string.Empty;
 
 		if (_memoryCache.TryGetValue(key, out string? cachedContent))
@@ -42,7 +41,7 @@ public class CrmRequestsHandler : DelegatingHandler
 				};
 			}
 		}
-		
+
 		HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 		string content = await response.Content.ReadAsStringAsync(cancellationToken);
 
@@ -50,5 +49,4 @@ public class CrmRequestsHandler : DelegatingHandler
 
 		return response;
 	}
-
 }

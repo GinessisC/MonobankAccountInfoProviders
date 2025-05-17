@@ -17,12 +17,10 @@ public class CurrencyRatesRepository : IRatesRepository
 
 	public async IAsyncEnumerable<CurrencyRate> GetCurrencyRatesAsync()
 	{
-		var ratesDto = _service.GetCurrencyRatesAsync();
-		var rates = ratesDto.Select(r => r.ToCurrencyRate());
+		IAsyncEnumerable<CurrencyRateDto> ratesDto = _service.GetCurrencyRatesAsync();
+		IAsyncEnumerable<CurrencyRate> rates = ratesDto.Select(r => r.ToCurrencyRate());
 
-		await foreach (var rate in rates)
-		{
+		await foreach (CurrencyRate rate in rates)
 			yield return rate;
-		}
 	}
 }

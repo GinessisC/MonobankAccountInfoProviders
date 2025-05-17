@@ -29,16 +29,22 @@ builder.Configuration.AddConfiguration(new ConfigurationBuilder()
 	.Build());
 
 builder.Services.AddSingleton<IUserConfigReader, FileUserConfigReader>();
+
 builder.Services.AddSingleton<UserConfig>(s =>
 {
-	var reader = s.GetRequiredService<IUserConfigReader>();
+	IUserConfigReader reader = s.GetRequiredService<IUserConfigReader>();
+
 	return reader.Read();
 });
 
 builder.Services.AddScoped<IAppConfigReader, AppSettingsReader>();
 
+builder.Services.AddSingleton<JsonSerializerOptions>(_ => new JsonSerializerOptions
+{
+	PropertyNameCaseInsensitive = true
+});
 
-builder.Services.AddSingleton<JsonSerializerOptions>(_ => new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+// Do not create new httpClient in parameters. It leads to overflow of clients
 builder.Services.AddHttpClient<CurrencyDataReceiverService>().AddHttpMessageHandler<CrmRequestsHandler>();
 builder.Services.AddHttpClient<MonobankProfileService>().AddHttpMessageHandler<CrmRequestsHandler>();
 builder.Services.AddHttpClient<MonobankRatesService>().AddHttpMessageHandler<CrmRequestsHandler>();
@@ -46,7 +52,6 @@ builder.Services.AddHttpClient<MonobankRatesService>().AddHttpMessageHandler<Crm
 builder.Services.AddSingleton<ICurrencyInfoRepository, CurrencyInfoRepository>();
 builder.Services.AddSingleton<IRatesRepository, CurrencyRatesRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
-
 
 builder.Services.AddScoped<ICurrencyOperator, CurrencyOperator>();
 builder.Services.AddScoped<IAccountData, AccountData>();

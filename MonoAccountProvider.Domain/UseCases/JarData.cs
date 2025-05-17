@@ -10,6 +10,7 @@ public class JarData : IJarData
 	private readonly IAsyncEnumerable<CurrencyRate> _rates;
 	private readonly ICurrencyOperator _currencyOperator;
 	private readonly UserConfig _userConfig;
+
 	public JarData(IProfileRepository profileRepository,
 		IRatesRepository ratesRepo,
 		ICurrencyOperator currencyOperator,
@@ -23,12 +24,12 @@ public class JarData : IJarData
 
 	public async IAsyncEnumerable<UserJarInCurrencies>? GetJars()
 	{
-		var profile = await _profileRepository.GetProfileAsync(_userConfig.Token);
-		
-		var targetCurrencyCodes = _currencyOperator.ToCurrencyCodes(_userConfig.CurrencyNames);
+		Profile profile = await _profileRepository.GetProfileAsync(_userConfig.Token);
 
-		var jars = profile.Jars;
-		
+		IAsyncEnumerable<int> targetCurrencyCodes = _currencyOperator.ToCurrencyCodes(_userConfig.CurrencyNames);
+
+		IEnumerable<Jar>? jars = profile.Jars;
+
 		if (jars is null)
 		{
 			yield break;
@@ -38,7 +39,9 @@ public class JarData : IJarData
 		{
 			MoneyConverter converter = new(_rates, jar.OnBalance);
 			IAsyncEnumerable<Money> moneyOnJar = converter.ConvertTo(targetCurrencyCodes);
-			var moneyWithNamedCurrencies = _currencyOperator.ToMoneyWithNamedCurrency(moneyOnJar);
+
+			IAsyncEnumerable<MoneyWithNamedCurrency> moneyWithNamedCurrencies =
+				_currencyOperator.ToMoneyWithNamedCurrency(moneyOnJar);
 
 			yield return new UserJarInCurrencies(jar.Title, moneyWithNamedCurrencies);
 		}

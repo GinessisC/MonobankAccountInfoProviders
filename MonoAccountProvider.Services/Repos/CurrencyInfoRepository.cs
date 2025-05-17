@@ -17,13 +17,10 @@ public class CurrencyInfoRepository : ICurrencyInfoRepository
 
 	public async IAsyncEnumerable<Currency> GetAllCurrenciesAsync()
 	{
-		var currenciesDto = _service.GetCurrenciesAsync();
-		var currencies = currenciesDto.Select(x => x.ToCurrency());
-		
-		await foreach (var dto in currencies)
-		{
-			yield return dto;
+		IAsyncEnumerable<CurrencyDto> currenciesDto = _service.GetCurrenciesAsync();
+		IAsyncEnumerable<Currency> currencies = currenciesDto.Select(x => x.ToCurrency());
 
-		}
+		await foreach (Currency dto in currencies)
+			yield return dto;
 	}
 }

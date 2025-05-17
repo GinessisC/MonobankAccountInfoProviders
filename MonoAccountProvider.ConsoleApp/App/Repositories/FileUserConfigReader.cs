@@ -23,7 +23,7 @@ public class FileUserConfigReader : IUserConfigReader
 		{
 			throw new JsonException("Token and Currencies are required.");
 		}
-		
+
 		return new UserConfig(token, currencies);
 	}
 }

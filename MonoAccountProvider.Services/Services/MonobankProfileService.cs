@@ -1,5 +1,4 @@
 using System.Net.Http.Json;
-using System.Runtime.InteropServices;
 using MonoAccountProvider.Services.Models;
 using MonoAccountProvider.Services.Repos;
 
@@ -20,8 +19,8 @@ public class MonobankProfileService
 
 	public async Task<ProfileDto> GetProfileAsync(string token)
 	{
-		var clientInfoUri = _appConfigReader.GetSectionAsync("ProfileUri");
-		
+		string clientInfoUri = _appConfigReader.GetSectionAsync("ProfileUri");
+
 		_httpClient.DefaultRequestHeaders.Add(NameOfTokenUrlHeader, token);
 		HttpResponseMessage response = await _httpClient.GetAsync(clientInfoUri);
 
@@ -31,7 +30,7 @@ public class MonobankProfileService
 				$" Status Code: {response.StatusCode}." +
 				$" {response.ReasonPhrase}");
 		}
-		
+
 		// ! is used, bc anyway if status code is 200 - profile was received
 		ProfileDto profileDto = (await response.Content.ReadFromJsonAsync<ProfileDto>()) !;
 

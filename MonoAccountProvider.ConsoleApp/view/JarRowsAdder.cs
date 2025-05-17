@@ -2,7 +2,6 @@ using ConsoleTables;
 using MonoAccountProvider.ConsoleApp.Extensions;
 using MonoAccountProvider.ConsoleApp.view.Interfaces;
 using MonoAccountProvider.Domain.Entities;
-using MonoAccountProvider.Domain.Repositories;
 using MonoAccountProvider.Domain.UseCases;
 
 namespace MonoAccountProvider.ConsoleApp.view;

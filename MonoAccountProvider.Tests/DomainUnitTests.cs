@@ -1,7 +1,4 @@
 using System.ComponentModel;
-using MonoAccountProvider.lib.src.profile.domain.cache.Interfaces;
-using MonoAccountProvider.lib.src.profile.domain.helpers;
-using MonoAccountProvider.lib.src.profile.domain.usecases;
 using NSubstitute;
 
 namespace MonoAccountProvider.Tests;

@@ -1,3 +1,4 @@
+using System.Globalization;
 using MonoAccountProvider.Domain.Entities;
 
 namespace MonoAccountProvider.ConsoleApp.view;
@@ -18,12 +19,12 @@ public class JarRow
 	{
 		yield return _jar.Title;
 
-		var amountsOfMoney = GetAmountsOfMoneyAsync();
-		await foreach (var money in amountsOfMoney)
-		{
+		IAsyncEnumerable<string> amountsOfMoney = GetAmountsOfMoneyAsync();
+
+		await foreach (string money in amountsOfMoney)
 			yield return money;
-		}
 	}
+
 	private async IAsyncEnumerable<string> GetAmountsOfMoneyAsync()
 	{
 		foreach (string currencyName in _userConfig.CurrencyNames)
@@ -33,7 +34,7 @@ public class JarRow
 				.Select(m => m.Amount)
 				.FirstOrDefaultAsync();
 
-			yield return balanceInCurrency.ToString(); //CultureInfo.CurrentCulture - but why? TODO
+			yield return balanceInCurrency.ToString(CultureInfo.CurrentCulture);
 		}
 	}
 }

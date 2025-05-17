@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-preview.3.25171.5" />
+        <PackageReference Include="System.Linq.AsyncEnumerable" Version="10.0.0-preview.3.25171.5"/>
     </ItemGroup>
 
 </Project>

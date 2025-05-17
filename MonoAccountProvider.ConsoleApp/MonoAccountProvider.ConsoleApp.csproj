@@ -8,24 +8,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Cocona" Version="2.2.0" />
-      <PackageReference Include="Cocona.Core" Version="2.2.0" />
-      <PackageReference Include="ConsoleTables" Version="2.6.2" />
-      <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0-preview.3.25171.5" />
-      <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0-preview.3.25171.5" />
+        <PackageReference Include="Cocona" Version="2.2.0"/>
+        <PackageReference Include="Cocona.Core" Version="2.2.0"/>
+        <PackageReference Include="ConsoleTables" Version="2.6.2"/>
+        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="10.0.0-preview.3.25171.5"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.0-preview.3.25171.5"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\MonoAccountProvider.Services\MonoAccountProvider.Services.csproj" />
+        <ProjectReference Include="..\MonoAccountProvider.Services\MonoAccountProvider.Services.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="userconfig.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <None Update="userconfig.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
