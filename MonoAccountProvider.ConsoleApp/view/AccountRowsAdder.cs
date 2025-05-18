@@ -11,9 +11,9 @@ public class AccountRowsAdder : ITableRowsAdder
 	private readonly IAsyncEnumerable<UserAccountInCurrencies> _accounts;
 	private readonly UserConfig _userConfig;
 
-	public AccountRowsAdder(IAccountData accounts, UserConfig userConfig)
+	public AccountRowsAdder(IAccountData accountsToAdd, UserConfig userConfig)
 	{
-		_accounts = accounts.GetAccountsAsync();
+		_accounts = accountsToAdd.GetAccountsAsync();
 		_userConfig = userConfig;
 	}
 

@@ -5,13 +5,13 @@ using MonoAccountProvider.Services.Repos;
 
 namespace MonoAccountProvider.Services.Services;
 
-public class MonobankRatesService
+public class CurrencyRatesService
 {
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly IAppConfigReader _appConfigReader;
 
-	public MonobankRatesService(HttpClient client,
+	public CurrencyRatesService(HttpClient client,
 		JsonSerializerOptions jsonSerializerOptions,
 		IAppConfigReader appConfigReader)
 	{

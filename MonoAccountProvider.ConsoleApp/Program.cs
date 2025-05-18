@@ -45,9 +45,9 @@ builder.Services.AddSingleton<JsonSerializerOptions>(_ => new JsonSerializerOpti
 });
 
 // Do not create new httpClient in parameters. It leads to overflow of clients
-builder.Services.AddHttpClient<CurrencyDataReceiverService>().AddHttpMessageHandler<CrmRequestsHandler>();
+builder.Services.AddHttpClient<CurrencyInfoReceiverService>().AddHttpMessageHandler<CrmRequestsHandler>();
 builder.Services.AddHttpClient<MonobankProfileService>().AddHttpMessageHandler<CrmRequestsHandler>();
-builder.Services.AddHttpClient<MonobankRatesService>().AddHttpMessageHandler<CrmRequestsHandler>();
+builder.Services.AddHttpClient<CurrencyRatesService>().AddHttpMessageHandler<CrmRequestsHandler>();
 
 builder.Services.AddSingleton<ICurrencyInfoRepository, CurrencyInfoRepository>();
 builder.Services.AddSingleton<IRatesRepository, CurrencyRatesRepository>();

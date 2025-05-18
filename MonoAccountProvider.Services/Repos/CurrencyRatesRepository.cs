@@ -8,9 +8,9 @@ namespace MonoAccountProvider.Services.Repos;
 
 public class CurrencyRatesRepository : IRatesRepository
 {
-	private readonly MonobankRatesService _service;
+	private readonly CurrencyRatesService _service;
 
-	public CurrencyRatesRepository(MonobankRatesService service)
+	public CurrencyRatesRepository(CurrencyRatesService service)
 	{
 		_service = service;
 	}

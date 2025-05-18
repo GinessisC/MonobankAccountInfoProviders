@@ -1,11 +1,33 @@
 using System.ComponentModel;
+using MonoAccountProvider.Domain.Entities;
+using MonoAccountProvider.Domain.helpers;
+using MonoAccountProvider.Domain.helpers.Interfaces;
+using MonoAccountProvider.Domain.Repositories;
+using MonoAccountProvider.Domain.UseCases;
 using NSubstitute;
 
 namespace MonoAccountProvider.Tests;
 
 public class DomainUnitTests
 {
-	private readonly List<Currency> _defaultCurrencies =
+	private static readonly IEnumerable<Money> _moneyToConvert = new Money[]
+	{
+		new(1, 840)
+	};
+
+	private static readonly IEnumerable<Account> _accounts = new Account[]
+	{
+		new("1234****5678", new Money(1, 840))
+	};
+
+	private static readonly IEnumerable<Jar> _jars = new Jar[]
+	{
+		new("1234****5678", new Money(1, 840))
+	};
+
+	private static readonly Profile _profile = new(_accounts, _jars);
+
+	private readonly IEnumerable<Currency> _defaultCurrencies =
 	[
 		new("USD", 840),
 		new("EUR", 978),
@@ -14,66 +36,55 @@ public class DomainUnitTests
 
 	private readonly List<CurrencyRate> _rates =
 	[
-		new(840, 980)
-		{
-			RateBuy = 41.17m,
-			RateSell = 41.6563m
-		},
+		new(840, 980, 41.17m, 41.6563m, null),
 
-		new(978, 980)
-		{
-			RateBuy = 47.3m,
-			RateSell = 48.151m
-		}
+		new(978, 980, 47.3m, 48.151m, null)
 	];
-
-	private readonly Profile _profile = new()
-	{
-		Accounts = new List<Account>
-		{
-			new(1, 840, "1234****5678")
-		}
-	};
 
 	[Fact]
 	[DisplayName("Converts money from one currency to another. Returns list of money of another currency")]
-	public void ConvertMoneyCorrectly()
+	public async Task ConvertMoneyCorrectly()
 	{
 		//Arrange
-		ICurrencyInfoCache currencyCache = Substitute.For<ICurrencyInfoCache>();
-		IUserCache userCache = Substitute.For<IUserCache>();
+
+		ICurrencyInfoRepository currencyRepository = Substitute.For<ICurrencyInfoRepository>();
+		currencyRepository.GetAllCurrenciesAsync().Returns(_defaultCurrencies.ToAsyncEnumerable());
+
+		IProfileRepository profileRepository = Substitute.For<IProfileRepository>();
+		profileRepository.GetProfileAsync("default_token").Returns(_profile);
+
+		ICurrencyOperator currencyOperator = new CurrencyOperator(currencyRepository);
+
+		IRatesRepository ratesRepository = Substitute.For<IRatesRepository>();
+		ratesRepository.GetCurrencyRatesAsync().Returns(_rates.ToAsyncEnumerable());
 
 		string[] currencyNamesToConvertTo = ["UAH"];
 		UserConfig userConfig = new("default_token", currencyNamesToConvertTo);
 
-		currencyCache.Currencies.Returns(_defaultCurrencies);
-		currencyCache.Rates.Returns(_rates);
-
-		CurrencyHelper currencyHelper = new(currencyCache);
-
-		userCache.Profile.Returns(_profile);
-		userCache.Conf.Returns(userConfig);
+		AccountData accountData = new(profileRepository, currencyOperator, ratesRepository, userConfig);
 
 		//Act
-		AccountData accountData = new(currencyCache, userCache, currencyHelper);
-		IList<UserAccountInCurrencies> account = accountData.GetAccounts();
+		IAsyncEnumerable<UserAccountInCurrencies> account = accountData.GetAccountsAsync();
 
-		IList<MoneyWithNamedCurrency> allMoney = MoneyInAccountWhereMaskedPanIs("1234****5678", account);
+		IAsyncEnumerable<MoneyWithNamedCurrency> allMoney = MoneyInAccountWhereMaskedPanIs("1234****5678", account);
 
-		MoneyWithNamedCurrency convertedToUah =
-			allMoney.FirstOrDefault(m => m.CurrencyName == currencyNamesToConvertTo[0])!;
+		MoneyWithNamedCurrency convertedToUah = (await
+			allMoney.FirstOrDefaultAsync(m => m.CurrencyName == currencyNamesToConvertTo[0]))!;
 
 		//Assert 
 		Assert.Equal(41.17m, convertedToUah.Amount);
 	}
 
-	private IList<MoneyWithNamedCurrency> MoneyInAccountWhereMaskedPanIs(string maskedPan,
-		IList<UserAccountInCurrencies> account)
+	private async IAsyncEnumerable<MoneyWithNamedCurrency> MoneyInAccountWhereMaskedPanIs(
+		string maskedPan,
+		IAsyncEnumerable<UserAccountInCurrencies> account)
 	{
-		IList<MoneyWithNamedCurrency>? allMoney = account
+		IAsyncEnumerable<MoneyWithNamedCurrency>? allMoney = await account
 			.Where(a => a.MaskedPan == maskedPan)
-			.Select(a => a.Balance).FirstOrDefault()!;
+			.Select(a => a.Balance)
+			.FirstOrDefaultAsync();
 
-		return allMoney;
+		await foreach (MoneyWithNamedCurrency money in allMoney)
+			yield return money;
 	}
 }

@@ -5,7 +5,7 @@ using MonoAccountProvider.Services.Repos;
 
 namespace MonoAccountProvider.Services.Services;
 
-public class CurrencyDataReceiverService
+public class CurrencyInfoReceiverService
 {
 	private const int UahCurrencyCode = 980;
 	private const string UahCurrencyName = "UAH";
@@ -13,7 +13,7 @@ public class CurrencyDataReceiverService
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-	public CurrencyDataReceiverService(HttpClient httpClient,
+	public CurrencyInfoReceiverService(HttpClient httpClient,
 		JsonSerializerOptions jsonSerializerOptions,
 		IAppConfigReader appConfigReader)
 	{

@@ -14,12 +14,12 @@ public class AccountData : IAccountData
 	public AccountData(IProfileRepository profileRepository,
 		ICurrencyOperator currencyOperator,
 		IRatesRepository ratesRepo,
-		IUserConfigReader userConfigReader)
+		UserConfig userConfigReader)
 	{
 		_profileRepository = profileRepository;
 		_rates = ratesRepo.GetCurrencyRatesAsync();
 		_currencyOperator = currencyOperator;
-		_userConfig = userConfigReader.Read();
+		_userConfig = userConfigReader;
 	}
 
 	public async IAsyncEnumerable<UserAccountInCurrencies> GetAccountsAsync()

@@ -8,9 +8,9 @@ namespace MonoAccountProvider.Services.Repos;
 
 public class CurrencyInfoRepository : ICurrencyInfoRepository
 {
-	private readonly CurrencyDataReceiverService _service;
+	private readonly CurrencyInfoReceiverService _service;
 
-	public CurrencyInfoRepository(CurrencyDataReceiverService service)
+	public CurrencyInfoRepository(CurrencyInfoReceiverService service)
 	{
 		_service = service;
 	}

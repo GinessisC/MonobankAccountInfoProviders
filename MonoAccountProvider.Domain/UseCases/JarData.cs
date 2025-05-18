@@ -14,12 +14,12 @@ public class JarData : IJarData
 	public JarData(IProfileRepository profileRepository,
 		IRatesRepository ratesRepo,
 		ICurrencyOperator currencyOperator,
-		IUserConfigReader userConfigReader)
+		UserConfig userConfigReader)
 	{
 		_profileRepository = profileRepository;
 		_rates = ratesRepo.GetCurrencyRatesAsync();
 		_currencyOperator = currencyOperator;
-		_userConfig = userConfigReader.Read();
+		_userConfig = userConfigReader;
 	}
 
 	public async IAsyncEnumerable<UserJarInCurrencies>? GetJars()
