@@ -1,7 +1,7 @@
+using Application.Helpers.Interfaces;
 using Application.Repositories;
 using Domain.Entities;
 using Domain.Extensions;
-using MonoAccountProvider.Domain.Helpers.Interfaces;
 
 namespace Application.Helpers;
 

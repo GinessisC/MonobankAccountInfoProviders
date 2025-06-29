@@ -1,9 +1,8 @@
+using Application.Helpers.Interfaces;
 using Application.Repositories;
 using Domain.Entities;
 using Domain.Entities.DataSources;
 using Microsoft.Extensions.Options;
-using MonoAccountProvider.Domain.Helpers.Interfaces;
-using MonoAccountProvider.Domain.Repositories;
 
 namespace Application.Services;
 

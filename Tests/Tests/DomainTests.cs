@@ -1,12 +1,11 @@
 using System.ComponentModel;
 using Application.Helpers;
+using Application.Helpers.Interfaces;
 using Application.Repositories;
 using Application.Services;
 using Domain.Entities;
 using Domain.Entities.DataSources;
 using Microsoft.Extensions.Options;
-using MonoAccountProvider.Domain.Helpers.Interfaces;
-using MonoAccountProvider.Domain.Repositories;
 using NSubstitute;
 
 namespace Tests.Tests;

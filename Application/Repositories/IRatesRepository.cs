@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace MonoAccountProvider.Domain.Repositories;
+namespace Application.Repositories;
 
 public interface IRatesRepository
 {

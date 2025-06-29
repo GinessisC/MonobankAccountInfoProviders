@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace MonoAccountProvider.Domain.Helpers.Interfaces;
+namespace Application.Helpers.Interfaces;
 
 public interface ICurrencyOperator
 {

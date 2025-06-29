@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using Application.Helpers;
+using Application.Helpers.Interfaces;
 using Application.Repositories;
 using Application.Services;
 using Cocona;
@@ -11,8 +12,6 @@ using ConsoleApp.View.Interfaces;
 using Domain.Entities.DataSources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MonoAccountProvider.Domain.Helpers.Interfaces;
-using MonoAccountProvider.Domain.Repositories;
 using MonoAccountProvider.Services.Models;
 using MonoAccountProvider.Services.Repositories;
 using MonoAccountProvider.Services.RequestHandlers;
