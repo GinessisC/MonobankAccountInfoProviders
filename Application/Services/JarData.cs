@@ -1,7 +1,7 @@
 using Application.Repositories;
-using Microsoft.Extensions.Options;
 using Domain.Entities;
 using Domain.Entities.DataSources;
+using Microsoft.Extensions.Options;
 using MonoAccountProvider.Domain.Helpers.Interfaces;
 using MonoAccountProvider.Domain.Repositories;
 

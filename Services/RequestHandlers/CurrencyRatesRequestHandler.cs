@@ -4,13 +4,12 @@ namespace MonoAccountProvider.Services.RequestHandlers;
 
 public class CurrencyRatesRequestHandler : RequestHandler
 {
-	public CurrencyRatesRequestHandler(IMemoryCache memoryCache) 
-		: base(memoryCache, new MemoryCacheEntryOptions()
+	public CurrencyRatesRequestHandler(IMemoryCache memoryCache)
+		: base(memoryCache, new MemoryCacheEntryOptions
+		{
+			Size = 10,
+			AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+		})
 	{
-		Size = 10,
-		AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
-	})
-	{
-		
 	}
 }

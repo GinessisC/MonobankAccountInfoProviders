@@ -13,6 +13,7 @@ public class TotalRowAdder : ITableRowsAdder
 	private readonly IAccountData _accountSource;
 	private readonly IJarData _jarSource;
 	private readonly UserCfgOptions _userCfgOptions;
+
 	public TotalRowAdder(IOptions<UserCfgOptions> userCfgOptions,
 		IAccountData accountSource,
 		IJarData jarData)
@@ -53,7 +54,8 @@ public class TotalRowAdder : ITableRowsAdder
 	private async Task<decimal> GetAmountOfMoneyOnAccountsAsyncIn(string currency, CancellationToken ct)
 	{
 		decimal sum = 0;
-		var accounts = _accountSource.GetAccountsAsync(ct);
+		IAsyncEnumerable<UserAccountInCurrencies> accounts = _accountSource.GetAccountsAsync(ct);
+
 		await foreach (UserAccountInCurrencies account in accounts)
 		{
 			decimal currentAccountAmount = await account.Balance
@@ -70,7 +72,8 @@ public class TotalRowAdder : ITableRowsAdder
 	private async Task<decimal> GetAmountOfMoneyOnJarsAsyncIn(string currency, CancellationToken ct)
 	{
 		decimal sum = 0;
-		var jars = _jarSource.GetJars(ct);
+		IAsyncEnumerable<UserJarInCurrencies>? jars = _jarSource.GetJars(ct);
+
 		if (jars == null)
 		{
 			return sum;

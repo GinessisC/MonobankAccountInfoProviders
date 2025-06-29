@@ -4,13 +4,13 @@ using Application.Repositories;
 using Application.Services;
 using Cocona;
 using Cocona.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using ConsoleApp.App;
 using ConsoleApp.App.Interfaces;
 using ConsoleApp.View;
 using ConsoleApp.View.Interfaces;
 using Domain.Entities.DataSources;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using MonoAccountProvider.Domain.Helpers.Interfaces;
 using MonoAccountProvider.Domain.Repositories;
 using MonoAccountProvider.Services.Models;
@@ -27,14 +27,15 @@ builder.Services.AddTransient<CurrencyInfoRequestHandler>();
 builder.Services.AddTransient<CurrencyRatesRequestHandler>();
 builder.Services.AddTransient<MonobankProfileRequestHandler>();
 
-
 builder.Configuration
 	.AddJsonFile("appsettings.json")
 	.AddJsonFile("userconfig.json");
 
-
 builder.Services.Configure<UserCfgOptions>(builder.Configuration.GetSection(nameof(UserCfgOptions)));
-builder.Services.Configure<CurrencyInfoSourceOptions>(builder.Configuration.GetSection(nameof(CurrencyInfoSourceOptions)));
+
+builder.Services.Configure<CurrencyInfoSourceOptions>(
+	builder.Configuration.GetSection(nameof(CurrencyInfoSourceOptions)));
+
 builder.Services.Configure<ProfileSourceOptions>(builder.Configuration.GetSection(nameof(ProfileSourceOptions)));
 builder.Services.Configure<RatesSourceOptions>(builder.Configuration.GetSection(nameof(RatesSourceOptions)));
 
@@ -65,9 +66,12 @@ builder.Services.AddScoped<ConsolePresenter>();
 
 CoconaApp app = builder.Build();
 
-app.AddCommand(async (ConsolePresenter console, IExceptionPresenter exception, CancellationTokenSource cts) =>
+app.AddCommand(async (ConsolePresenter console,
+	IExceptionPresenter exception,
+	CancellationTokenSource cts) =>
 {
-	var ct = cts.Token;
+	CancellationToken ct = cts.Token;
+
 	try
 	{
 		await console.Present(ct);

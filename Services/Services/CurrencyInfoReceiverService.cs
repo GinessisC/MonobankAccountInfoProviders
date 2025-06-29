@@ -1,10 +1,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Domain.Entities.DataSources;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Domain.Entities.DataSources;
 using MonoAccountProvider.Services.Models;
-using MonoAccountProvider.Services.Repositories;
 
 namespace MonoAccountProvider.Services.Services;
 
@@ -15,9 +14,10 @@ public class CurrencyInfoReceiverService
 	private readonly CurrencyInfoSourceOptions _currencyInfoSourceOptions;
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
-	
+
 	public CurrencyInfoReceiverService(HttpClient httpClient,
-		[FromKeyedServices(JsonSerializationOptionNames.PropertyNameCaseInsensitive)] JsonSerializerOptions jsonSerializerOptions,
+		[FromKeyedServices(JsonSerializationOptionNames.PropertyNameCaseInsensitive)]
+		JsonSerializerOptions jsonSerializerOptions,
 		IOptions<CurrencyInfoSourceOptions> currencyInfoSourceOptions)
 	{
 		_httpClient = httpClient;

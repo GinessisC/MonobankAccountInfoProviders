@@ -1,10 +1,10 @@
 using Application.Services;
+using ConsoleApp.Extensions;
 using ConsoleApp.View.Interfaces;
 using ConsoleTables;
-using Microsoft.Extensions.Options;
-using ConsoleApp.Extensions;
 using Domain.Entities;
 using Domain.Entities.DataSources;
+using Microsoft.Extensions.Options;
 
 namespace ConsoleApp.View;
 
@@ -21,7 +21,8 @@ public class JarRowsAdder : ITableRowsAdder
 
 	public async Task AddToTableAsync(ConsoleTable table, CancellationToken ct)
 	{
-		var jars = _jarSource.GetJars(ct);
+		IAsyncEnumerable<UserJarInCurrencies>? jars = _jarSource.GetJars(ct);
+
 		if (jars == null)
 		{
 			Console.WriteLine("No Jars found");

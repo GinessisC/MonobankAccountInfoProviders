@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoAccountProvider.Tests", "MonoAccountProvider.Tests\MonoAccountProvider.Tests.csproj", "{DC3D5ED9-6A5D-4087-B6A4-C9064226116E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{DC3D5ED9-6A5D-4087-B6A4-C9064226116E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8114C109-90B4-45D5-B756-A06246EAAF4C}"
 EndProject

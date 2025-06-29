@@ -1,6 +1,5 @@
 using Application.Repositories;
 using Domain.Entities;
-using MonoAccountProvider.Domain.Repositories;
 using MonoAccountProvider.Services.Mappings;
 using MonoAccountProvider.Services.Models;
 using MonoAccountProvider.Services.Services;

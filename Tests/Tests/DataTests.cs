@@ -7,16 +7,17 @@ using MonoAccountProvider.Services.Repositories;
 using MonoAccountProvider.Services.Services;
 using NSubstitute;
 
-namespace MonoAccountProvider.Tests.Tests;
+namespace Tests.Tests;
 
 public class DataTests
 {
-	CancellationTokenSource cts = new();
+	private readonly CancellationTokenSource _cts = new();
 
-	private JsonSerializerOptions _jsonOptions = new JsonSerializerOptions
+	private readonly JsonSerializerOptions _jsonOptions = new()
 	{
 		PropertyNameCaseInsensitive = true
 	};
+
 	[Fact]
 	[DisplayName("Checks if it is thrown ArgumentException when token is invalid")]
 	public async Task InvalidToken()
@@ -25,19 +26,24 @@ public class DataTests
 		string invalidToken = "token";
 		HttpClient client = new();
 		IOptions<ProfileSourceOptions> profileSourceOp = Substitute.For<IOptions<ProfileSourceOptions>>();
+
 		profileSourceOp.Value.Returns(new ProfileSourceOptions
 		{
 			Uri = "https://api.monobank.ua/personal/client-info"
 		});
-		
+
 		IOptionsSnapshot<UserCfgOptions> userOp = Substitute.For<IOptionsSnapshot<UserCfgOptions>>();
-		userOp.Value.Returns(new UserCfgOptions() {Token = invalidToken});
+
+		userOp.Value.Returns(new UserCfgOptions
+		{
+			Token = invalidToken
+		});
 
 		//Act
 		MonobankProfileService service = new(client, profileSourceOp, userOp);
 
 		//Assert
-		await Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetProfileAsync(cts.Token));
+		await Assert.ThrowsAsync<HttpRequestException>(async () => await service.GetProfileAsync(_cts.Token));
 	}
 
 	[Fact]
@@ -45,18 +51,22 @@ public class DataTests
 	{
 		//Arrange
 		HttpClient client = new();
-		IOptions<CurrencyInfoSourceOptions> currencyInfoSourceOp = Substitute.For<IOptions<CurrencyInfoSourceOptions>>();
+
+		IOptions<CurrencyInfoSourceOptions> currencyInfoSourceOp =
+			Substitute.For<IOptions<CurrencyInfoSourceOptions>>();
+
 		currencyInfoSourceOp.Value.Returns(new CurrencyInfoSourceOptions
 		{
 			Uri = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
 		});
+
 		CurrencyInfoReceiverService service = new(client, _jsonOptions, currencyInfoSourceOp);
 
 		CurrencyInfoRepository repo = new(service);
 
 		//Act
 		IAsyncEnumerable<Currency> currencies = repo.GetAllCurrenciesAsync();
-	
+
 		bool allPropsNeitherNullNorEmpty =
 			await currencies.AllAsync(c => string.IsNullOrEmpty(c.Name) is false && c.Code != 0);
 
@@ -70,7 +80,11 @@ public class DataTests
 		//Arrange
 		HttpClient client = new();
 		IOptions<RatesSourceOptions> ratesSourceOp = Substitute.For<IOptions<RatesSourceOptions>>();
-		ratesSourceOp.Value.Returns(new RatesSourceOptions{Uri = "https://api.monobank.ua/bank/currency"});
+
+		ratesSourceOp.Value.Returns(new RatesSourceOptions
+		{
+			Uri = "https://api.monobank.ua/bank/currency"
+		});
 
 		CurrencyRatesService service = new(client, _jsonOptions, ratesSourceOp);
 

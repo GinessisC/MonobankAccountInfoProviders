@@ -3,7 +3,7 @@ using ConsoleApp.View;
 using Domain.Entities;
 using Domain.Entities.DataSources;
 
-namespace MonoAccountProvider.Tests.Tests;
+namespace Tests.Tests;
 
 public class PresentationTests
 {
@@ -18,7 +18,7 @@ public class PresentationTests
 	private static readonly UserCfgOptions _cfgOptions = new()
 	{
 		Token = "token",
-		CurrencyNames = ["USD"],
+		CurrencyNames = ["USD"]
 	};
 
 	[Fact]

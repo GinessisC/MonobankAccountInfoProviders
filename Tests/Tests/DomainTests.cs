@@ -9,12 +9,10 @@ using MonoAccountProvider.Domain.Helpers.Interfaces;
 using MonoAccountProvider.Domain.Repositories;
 using NSubstitute;
 
-namespace MonoAccountProvider.Tests.Tests;
+namespace Tests.Tests;
 
 public class DomainTests
 {
-	private readonly CancellationTokenSource _cts = new();
-
 	private static readonly IEnumerable<Money> _moneyToConvert = new Money[]
 	{
 		new(1, 840)
@@ -31,6 +29,7 @@ public class DomainTests
 	};
 
 	private static readonly Profile _profile = new(_accounts, _jars);
+	private readonly CancellationTokenSource _cts = new();
 
 	private readonly IEnumerable<Currency> _defaultCurrencies =
 	[
@@ -54,7 +53,6 @@ public class DomainTests
 		ICurrencyInfoRepository currencyRepository = Substitute.For<ICurrencyInfoRepository>();
 		currencyRepository.GetAllCurrenciesAsync().Returns(_defaultCurrencies.ToAsyncEnumerable());
 
-
 		IProfileRepository profileRepository = Substitute.For<IProfileRepository>();
 		profileRepository.GetProfileAsync(_cts.Token).Returns(_profile);
 
@@ -70,6 +68,7 @@ public class DomainTests
 			Token = "Token",
 			CurrencyNames = currencyNamesToConvertTo
 		};
+
 		IOptions<UserCfgOptions> userOptions = Substitute.For<IOptions<UserCfgOptions>>();
 		userOptions.Value.Returns(userCfgOptions);
 

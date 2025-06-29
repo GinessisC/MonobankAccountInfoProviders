@@ -1,10 +1,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
+using Domain.Entities.DataSources;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Domain.Entities.DataSources;
 using MonoAccountProvider.Services.Models;
-using MonoAccountProvider.Services.Repositories;
 
 namespace MonoAccountProvider.Services.Services;
 
@@ -13,8 +12,10 @@ public class CurrencyRatesService
 	private readonly HttpClient _httpClient;
 	private readonly JsonSerializerOptions _jsonSerializerOptions;
 	private readonly RatesSourceOptions _currencyRatesSourceOptions;
+
 	public CurrencyRatesService(HttpClient client,
-		[FromKeyedServices(JsonSerializationOptionNames.PropertyNameCaseInsensitive)] JsonSerializerOptions jsonSerializerOptions,
+		[FromKeyedServices(JsonSerializationOptionNames.PropertyNameCaseInsensitive)]
+		JsonSerializerOptions jsonSerializerOptions,
 		IOptions<RatesSourceOptions> currencyRatesSourceOptions)
 	{
 		_httpClient = client;

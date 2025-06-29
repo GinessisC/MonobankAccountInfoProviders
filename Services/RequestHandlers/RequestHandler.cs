@@ -22,11 +22,11 @@ public abstract class RequestHandler : DelegatingHandler
 	{
 		string key = request.RequestUri?.ToString() ?? string.Empty;
 
-		var content = await _memoryCache.GetOrCreateAsync(key, async entry =>
+		string content = await _memoryCache.GetOrCreateAsync(key, async entry =>
 		{
 			entry.SetOptions(_cacheOptions);
-			
-			var response = await base.SendAsync(request, cancellationToken);
+
+			HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
 			return await response.Content.ReadAsStringAsync(cancellationToken);
 		}, _cacheOptions) ?? throw new InvalidOperationException($"Cache miss on request: {key}");
