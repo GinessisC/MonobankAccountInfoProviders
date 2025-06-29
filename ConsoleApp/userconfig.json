@@ -1,0 +1,9 @@
+{
+  "UserCfgOptions":{
+    "Token": "token",
+    "CurrencyNames": [
+      "UAH",
+      "USD"
+    ]
+  }
+}
